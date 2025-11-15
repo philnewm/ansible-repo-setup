@@ -1,0 +1,15 @@
+---
+
+- name: Clean apt cache
+  become: true
+  ansible.builtin.apt:
+    clean: true
+
+- name: Update apt metadata cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  register: apt_cache_update
+  failed_when: apt_cache_update.rc not in [0, 100]
+
+...

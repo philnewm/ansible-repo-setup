@@ -1,8 +1,33 @@
 ---
 
-- name: Remove unused dependencies
+- name: Remove repo files
   become: true
-  ansible.builtin.package:
-    autoremove: true
+  when: ansible_os_family == "RedHat"
+  loop: "{{ dnf_repo_files }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.section }}"
+  ansible.builtin.file:
+    path: "{{ repo.file_name }}.repo"
+    state: absent
+  register: repo_setup
+
+- name: Remove local mirror entries
+  become: true
+  when: ansible_os_family == "Debian"
+  ansible.builtin.lineinfile:
+    path: "{{ repos_path_debian }}"
+    regexp: '{{ local_registry }}'
+    state: absent
+
+- name: Include dnf cache reload
+  when: repo_setup.changed and ansible_os_family == "RedHat"
+  ansible.builtin.include_tasks:
+    file: dnf_clean.yml
+
+- name: Include dnf cache reload
+  when: repo_setup.changed and ansible_os_family == "RedHat"
+  ansible.builtin.include_tasks:
+    file: dnf_clean.yml
 
 ...

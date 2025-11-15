@@ -1,14 +1,42 @@
 ---
 
-- name: Install debian specific package_facts dependency
-  become: true
-  when: ansible_distribution == "Debian"
-  ansible.builtin.package:
-    name: python-apt-common
-    state: present
+# TODO fix debian version
 
-# INFO This task may be obsolete for your use-case
-- name: Gather package facts
-  ansible.builtin.package_facts:
+- name: Set up repo files
+  become: true
+  when: ansible_os_family == "RedHat"
+  loop: "{{ dnf_repo_files }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.section }}"
+  ansible.builtin.template:
+    src: repofile.repo.j2
+    dest: "{{ repos_path_rhel }}/{{ repo.file_name }}.repo"
+    owner: root
+    group: root
+    mode: "0644"
+  register: dnf_repo_setup
+
+- name: Insert local mirror
+  become: true
+  when: ansible_os_family == "Debian"
+  loop: "{{ apt_repo_entries | subelements('components') }}"
+  loop_control:
+    label: "{{ item.0.suite }}"
+  ansible.builtin.lineinfile:
+    path: "{{ repos_path_debian }}"
+    line: "deb {{ local_registry }} {{ item.0.suite }} {{ item.1 }}"
+    insertbefore: "deb .*{{ item.0.suite }} {{ item.1 }}"
+  register: apt_repo_setup
+
+- name: Include dnf cache reload
+  when: dnf_repo_setup.changed and ansible_os_family == "RedHat"
+  ansible.builtin.include_tasks:
+    file: dnf_clean.yml
+
+- name: Include dnf cache reload
+  when: apt_repo_setup.changed and ansible_os_family == "Debian"
+  ansible.builtin.include_tasks:
+    file: apt_clean.yml
 
 ...
