@@ -7,123 +7,92 @@ local_registry: "local_registry"
 gpg_key_base_path: "file:///etc"
 gpg_key_pki: "{{ gpg_key_base_path}}/pki/rpm-gpg"
 dnf_repo_files:
-  - name: "[Local] AlmaLinux $releasever - BaseOS"
-    section: baseos-local
+  - name: "almalinux-baseos-local"
+    description: "[Local] AlmaLinux $releasever - BaseOS"
     file_name: almalinux-baseos-local
     baseurl: "{{ local_registry }}/almalinux-$releasever-baseos/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
+    enabled: true
+    gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    enabled_metadata: 1
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] AlmaLinux $releasever - AppStream"
-    section: appstream-local
-    file_name: almalinux-appstream-local
+    skip_if_unavailable: true
+  - name: "almalinux-appstream-local"
+    description: "[Local] AlmaLinux $releasever - AppStream"
     baseurl: "{{ local_registry }}/almalinux-$releasever-appstream/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
+    enabled: true
+    gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    enabled_metadata: 1
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] AlmaLinux $releasever - CRB"
-    section: crb-local
-    file_name: almalinux-crb-local
+    skip_if_unavailable: true
+  - name: "almalinux-crb-local"
+    description: "[Local] AlmaLinux $releasever - CRB"
     baseurl: "{{ local_registry}}/almalinux-$releasever-crb/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
+    enabled: true
+    gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    enabled_metadata: 0
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] AlmaLinux $releasever - Extras"
-    section: extras-local
-    file_name: almalinux-extras-local
+    skip_if_unavailable: true
+  - name: "almalinux-extras-local"
+    description: "[Local] AlmaLinux $releasever - Extras"
     baseurl: "{{ local_registry }}/almalinux-$releasever-extras/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
+    enabled: true
+    gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    enabled_metadata: 0
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] Extra Packages for Enterprise Linux 9 - $basearch"
-    section: epel-local
-    file_name: epel-local
+    skip_if_unavailable: true
+  - name: epel-9-local
+    description: "[Local] Extra Packages for Enterprise Linux 9 - $basearch"
     baseurl: "{{ local_registry }}/epel-9/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-EPEL-9"
-    metadata_expire: 86400
-    enabled_metadata: 0
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9"
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] ROCm 6.4 repository"
-    section: rocm-local
-    file_name: rocm-local
+    skip_if_unavailable: true
+  - name: "rocm-el9-local"
+    description: "[Local] ROCm repository"
     baseurl: "{{ local_registry }}/rocm-el9/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 1
-    gpgkey: "{{ gpg_key_base_path }}/amdgpu-install/rocm.gpg.key"
-    metadata_expire: 86400
-    enabled_metadata: 0
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] Visual Studio Code"
-    section: code-local
-    file_name: vscode-local
+    skip_if_unavailable: true
+  - name: "code-local"
+    description: "[Local] Visual Studio Code"
     baseurl: "{{ local_registry }}/vscode-yum/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 0
+    enabled: true
+    gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    metadata_expire: 86400
-    enabled_metadata: 0
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] RPM Fusion for EL 9 - Free - Updates"
-    section: rpmfusion-free-updates-local
-    file_name: rpmfusion-free-updates-local
+    skip_if_unavailable: true
+  - name: "rpmfusion-free-updates-local"
+    description: "[Local] RPM Fusion for EL 9 - Free - Updates"
     baseurl: "{{ local_registry }}/rpm-fusion-9-free/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 0
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-rpmfusion-free-el-9"
-    metadata_expire: 86400
-    enabled_metadata: 0
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-9"
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
-  - name: "[Local] RPM Fusion for EL 9 - Nonfree - Updates"
-    section: rpmfusion-nonfree-updates-local
-    file_name: rpmfusion-nonfree-updates-local
+    skip_if_unavailable: true
+  - name: rpmfusion-nonfree-updates-local
+    description: "[Local] RPM Fusion for EL 9 - Nonfree - Updates"
     baseurl: "{{ local_registry }}/rpm-fusion-9-nonfree/"
-    enabled: 1
-    gpgcheck: 1
-    countme: 0
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
-    metadata_expire: 86400
-    enabled_metadata: 0
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
     priority: 1
     timeout: 3
-    skip_if_unavailable: 1
+    skip_if_unavailable: true
 
 apt_repo_entries:
   - suite: "jammy"

@@ -2,19 +2,42 @@
 
 # TODO fix debian version
 
-- name: Set up repo files
+# - name: Set up repo files
+#   become: true
+#   when: ansible_os_family == "RedHat"
+#   loop: "{{ dnf_repo_files }}"
+#   loop_control:
+#     loop_var: repo
+#     label: "{{ repo.section }}"
+#   ansible.builtin.template:
+#     src: repofile.repo.j2
+#     dest: "{{ repos_path_rhel }}/{{ repo.file_name }}.repo"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   register: dnf_repo_setup
+
+- name: Set up repos
   become: true
   when: ansible_os_family == "RedHat"
   loop: "{{ dnf_repo_files }}"
   loop_control:
     loop_var: repo
-    label: "{{ repo.section }}"
-  ansible.builtin.template:
-    src: repofile.repo.j2
-    dest: "{{ repos_path_rhel }}/{{ repo.file_name }}.repo"
-    owner: root
-    group: root
+    label: "{{ repo.name }}"
+  ansible.builtin.yum_repository:
+    name: "{{ repo.name }}"
+    description: "{{ repo.description }}"
+    baseurl: "{{ repo.baseurl }}"
+    priority: "{{ repo.priority }}"
+    timeout: "{{ repo.timeout }}"
+    enabled: "{{ repo.enabled | default(true) }}"
+    gpgcheck: "{{ repo.enabled }}"
+    gpgkey: "{{ repo.gpgkey }}"
+    metadata_expire: "{{ metadata_expire | default(21600) }}"
+    skip_if_unavailable: "{{ repo.skip_if_unavailable | default(false) }}"
     mode: "0644"
+    owner: "root"
+    state: present
   register: dnf_repo_setup
 
 - name: Insert local mirror
