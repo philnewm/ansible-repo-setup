@@ -66,7 +66,7 @@ dnf_repo_files:
     priority: 1
     timeout: 3
     skip_if_unavailable: true
-  - name: "code-local"
+  - name: "vscode-local"
     description: "[Local] Visual Studio Code"
     baseurl: "{{ local_registry }}/vscode-yum/"
     enabled: true
@@ -93,6 +93,11 @@ dnf_repo_files:
     priority: 1
     timeout: 3
     skip_if_unavailable: true
+
+pip_global_config_path: "/etc/pip.conf"
+pip_local_regsitry: false
+pip_fallback_registry: "https://pypi.org/simple"
+pip_trusted_host: false
 
 apt_repo_entries:
   - suite: "jammy"

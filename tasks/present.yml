@@ -62,4 +62,14 @@
   ansible.builtin.include_tasks:
     file: apt_clean.yml
 
+- name: Configure pip registries
+  become: true
+  when: pip_local_regsitry
+  ansible.builtin.template:
+    src: "pip.conf.j2"
+    dest: "{{ pip_global_config_path }}"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+
 ...
