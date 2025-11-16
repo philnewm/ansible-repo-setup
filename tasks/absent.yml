@@ -30,4 +30,10 @@
   ansible.builtin.include_tasks:
     file: apt_clean.yml
 
+- name: Remove pip config
+  become: true
+  ansible.builtin.file:
+    path: "{{ pip_global_config_path }}"
+    state: "absent"
+
 ...
