@@ -1,44 +1,13 @@
 ---
 
-# TODO fix debian version
+- name: Load repository list from YAML file
+  ansible.builtin.include_vars:
+    file: "{{ repo_config }}"
+    name: repos_list
 
-# - name: Set up repo files
-#   become: true
-#   when: ansible_os_family == "RedHat"
-#   loop: "{{ dnf_repo_files }}"
-#   loop_control:
-#     loop_var: repo
-#     label: "{{ repo.section }}"
-#   ansible.builtin.template:
-#     src: repofile.repo.j2
-#     dest: "{{ repos_path_rhel }}/{{ repo.file_name }}.repo"
-#     owner: root
-#     group: root
-#     mode: "0644"
-#   register: dnf_repo_setup
-
-- name: Set up repos
-  become: true
-  when: ansible_os_family == "RedHat"
-  loop: "{{ dnf_repo_files }}"
-  loop_control:
-    loop_var: repo
-    label: "{{ repo.name }}"
-  ansible.builtin.yum_repository:
-    name: "{{ repo.name }}"
-    description: "{{ repo.description }}"
-    baseurl: "{{ repo.baseurl }}"
-    priority: "{{ repo.priority }}"
-    timeout: "{{ repo.timeout }}"
-    enabled: "{{ repo.enabled | default(true) }}"
-    gpgcheck: "{{ repo.enabled }}"
-    gpgkey: "{{ repo.gpgkey }}"
-    metadata_expire: "{{ metadata_expire | default(21600) }}"
-    skip_if_unavailable: "{{ repo.skip_if_unavailable | default(false) }}"
-    mode: "0644"
-    owner: "root"
-    state: present
-  register: dnf_repo_setup
+- name: Set up dnf repos
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_os_family | lower }}_repos.yml"
 
 - name: Insert local mirror
   become: true
@@ -52,15 +21,12 @@
     insertbefore: "deb .*{{ item.0.suite }} {{ item.1 }}"
   register: apt_repo_setup
 
-- name: Include dnf cache reload
-  when: dnf_repo_setup.changed and ansible_os_family == "RedHat"
-  ansible.builtin.include_tasks:
-    file: dnf_clean.yml
-
-- name: Include dnf cache reload
+- name: Include apt cache reload
   when: apt_repo_setup.changed and ansible_os_family == "Debian"
   ansible.builtin.include_tasks:
     file: apt_clean.yml
+
+# TODO fix debian version
 
 - name: Configure pip registries
   become: true

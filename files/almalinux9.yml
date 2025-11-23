@@ -1,0 +1,90 @@
+---
+
+- name: "almalinux-appstream-local"
+  description: "[Local] AlmaLinux $releasever - AppStream"
+  baseurl: "{{ local_registry }}/almalinux-$releasever-appstream/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+  metadata_expire: 86400
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "almalinux-baseos-local"
+  description: "[Local] AlmaLinux $releasever - BaseOS"
+  file_name: almalinux-baseos-local
+  baseurl: "{{ local_registry }}/almalinux-$releasever-baseos/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+  metadata_expire: 86400
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "almalinux-crb-local"
+  description: "[Local] AlmaLinux $releasever - CRB"
+  baseurl: "{{ local_registry}}/almalinux-$releasever-crb/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+  metadata_expire: 86400
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "almalinux-extras-local"
+  description: "[Local] AlmaLinux $releasever - Extras"
+  baseurl: "{{ local_registry }}/almalinux-$releasever-extras/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+  metadata_expire: 86400
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: epel-9-local
+  description: "[Local] Extra Packages for Enterprise Linux 9 - $basearch"
+  baseurl: "{{ local_registry }}/epel-9/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9"
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "rocm-el9-local"
+  description: "[Local] ROCm repository"
+  baseurl: "{{ local_registry }}/rocm-el9/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "vscode-local"
+  description: "[Local] Visual Studio Code"
+  baseurl: "{{ local_registry }}/vscode-yum/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: "rpmfusion-free-updates-local"
+  description: "[Local] RPM Fusion for EL 9 - Free - Updates"
+  baseurl: "{{ local_registry }}/rpm-fusion-9-free/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-9"
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+- name: rpmfusion-nonfree-updates-local
+  description: "[Local] RPM Fusion for EL 9 - Nonfree - Updates"
+  baseurl: "{{ local_registry }}/rpm-fusion-9-nonfree/"
+  enabled: true
+  gpgcheck: true
+  gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
+  priority: 1
+  timeout: 3
+  skip_if_unavailable: true
+
+...
