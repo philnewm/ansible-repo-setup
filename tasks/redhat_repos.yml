@@ -2,7 +2,7 @@
 
 - name: Set up repos
   become: true
-  loop: "{{ repos_list }}"
+  loop: "{{ repo_list }}"
   loop_control:
     loop_var: repo
     label: "{{ repo.name }}"

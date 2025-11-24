@@ -1,5 +1,9 @@
 ---
 
+- name: Load repository list from YAML file
+  ansible.builtin.include_vars:
+    file: "{{ repo_config }}"
+
 - name: Get enabled repos
   ansible.builtin.shell:
     cmd: |
@@ -10,14 +14,14 @@
   register: enabled_repos_result
 
 - name: Test enabled repos
-  loop: "{{ dnf_repo_files }}"
+  loop: "{{ repo_list }}"
   loop_control:
     loop_var: repo
-    label: "{{ repo.section }}"
+    label: "{{ repo.name }}"
   ansible.builtin.assert:
     that:
-      - repo.section in enabled_repos_result.stdout_lines
-    fail_msg: "Failed to find {{ repo.section }}"
+      - repo.name in enabled_repos_result.stdout_lines
+    fail_msg: "Failed to find {{ repo.name }}"
     quiet: true
 
 ...

@@ -1,11 +1,11 @@
 ---
 
+# TODO test loading vars as template to achieve vartiable substitution
 - name: Load repository list from YAML file
   ansible.builtin.include_vars:
     file: "{{ repo_config }}"
-    name: repos_list
 
-- name: Set up dnf repos
+- name: Include repo files logic
   ansible.builtin.include_tasks:
     file: "{{ ansible_os_family | lower }}_repos.yml"
 

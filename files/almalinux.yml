@@ -1,49 +1,53 @@
 ---
 
 repo_list:
-  - name: fedora-local
-    description: "[Local] Fedora $releasever - $basearch"
-    baseurl: "{{ local_registry }}/fedora43-os/"
+  - name: "almalinux-appstream-local"
+    description: "[Local] AlmaLinux $releasever - AppStream"
+    baseurl: "{{ local_registry }}/almalinux-$releasever-appstream/"
     enabled: true
     gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    metadata_expire: 86400
     priority: 1
     timeout: 3
     skip_if_unavailable: true
-  - name: fedora-updates-local
-    description: "[Local] Fedora $releasever - $basearch - Updates"
-    baseurl: "{{ local_registry }}/fedora43-updates/"
+  - name: "almalinux-baseos-local"
+    description: "[Local] AlmaLinux $releasever - BaseOS"
+    file_name: almalinux-baseos-local
+    baseurl: "{{ local_registry }}/almalinux-$releasever-baseos/"
     enabled: true
     gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    metadata_expire: 86400
     priority: 1
     timeout: 3
     skip_if_unavailable: true
-    # INFO https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo
-  - name: tuxedo
-    description: "Tuxedo drivers repository Fedora $releasever - $basearch"
-    baseurl: "https://rpm.tuxedocomputers.com/fedora/43/x86_64/base"
+  - name: "almalinux-crb-local"
+    description: "[Local] AlmaLinux $releasever - CRB"
+    baseurl: "{{ local_registry}}/almalinux-$releasever-crb/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://rpm.tuxedocomputers.com/fedora/43/0x54840598.pub.asc"
-    priority: 50
-    timeout: 3
-    skip_if_unavailable: false
-  - name: tuxedo-local
-    description: "[Local] Tuxedo drivers repository Fedora $releasever - $basearch"
-    baseurl: "{{ local_registry }}/tuxedo-fedora-43/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://rpm.tuxedocomputers.com/fedora/43/0x54840598.pub.asc"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    metadata_expire: 86400
     priority: 1
     timeout: 3
-    skip_if_unavailable: false
-  - name: fedora-updates-local
-    description: "[Local] Fedora $releasever - $basearch - Updates"
-    baseurl: "{{ local_registry }}/fedora43-updates/"
+    skip_if_unavailable: true
+  - name: "almalinux-extras-local"
+    description: "[Local] AlmaLinux $releasever - Extras"
+    baseurl: "{{ local_registry }}/almalinux-$releasever-extras/"
     enabled: true
     gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    metadata_expire: 86400
+    priority: 1
+    timeout: 3
+    skip_if_unavailable: true
+  - name: epel-9-local
+    description: "[Local] Extra Packages for Enterprise Linux 9 - $basearch"
+    baseurl: "{{ local_registry }}/epel-9/"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9"
     priority: 1
     timeout: 3
     skip_if_unavailable: true
