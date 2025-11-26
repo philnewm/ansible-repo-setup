@@ -1,45 +1,41 @@
 ---
 
+- name: Check if repo file exists
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/{{ ansible_distribution | lower }}.yml"
+  register: repo_file
+  delegate_to: localhost
+
 - name: Load repository list from YAML file
+  when: repo_file.stat.exists
   ansible.builtin.include_vars:
     file: "{{ repo_config }}"
 
-- name: Remove repo files
-  become: true
+- name: Clean dnf changes
   when: ansible_os_family == "RedHat"
-  loop: "{{ repo_list }}"
-  loop_control:
-    loop_var: repo
-    label: "{{ repo.name }}"
-  ansible.builtin.yum_repository:
-    name: "{{ repo.name }}"
-    state: absent
-  register: repo_removal
+  block:
+    - name: Remove repo files
+      become: true
+      loop: "{{ repo_list }}"
+      loop_control:
+        loop_var: repo
+        label: "{{ repo.name }}"
+      ansible.builtin.yum_repository:
+        name: "{{ repo.name }}"
+        state: absent
+      register: repo_removal
 
-- name: Remove local mirror entries
-  become: true
-  when: ansible_os_family == "Debian"
-  ansible.builtin.lineinfile:
-    path: "{{ repos_path_debian }}"
-    regexp: '{{ local_registry }}'
-    state: absent
+    - name: Clean dnf cache
+      become: true
+      ansible.builtin.command:
+        cmd: dnf clean all
+      register: dnf_clean_result
+      changed_when: dnf_clean_result.rc == 0
 
-- name: Clean dnf cache
-  become: true
-  ansible.builtin.command:
-    cmd: dnf clean all
-  register: dnf_clean_result
-  changed_when: dnf_clean_result.rc == 0
-
-- name: Update dnf metadata cache
-  become: true
-  ansible.builtin.dnf:
-    update_cache: true
-
-# - name: Include apt cache reload
-#   when: repo_removal.changed and ansible_os_family == "Debian"
-#   ansible.builtin.include_tasks:
-#     file: apt_clean.yml
+    - name: Update dnf metadata cache
+      become: true
+      ansible.builtin.dnf:
+        update_cache: true
 
 - name: Remove pip config
   become: true

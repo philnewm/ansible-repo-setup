@@ -1,27 +1,37 @@
 ---
 
+- name: Check if repo file exists
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/{{ ansible_distribution | lower }}.yml"
+  register: repo_file
+  delegate_to: localhost
+
 - name: Load repository list from YAML file
+  when: repo_file.stat.exists
   ansible.builtin.include_vars:
     file: "{{ repo_config }}"
 
-- name: Get enabled repos
-  ansible.builtin.shell:
-    cmd: |
-      set -o pipefail
-      dnf repolist --enabled | awk 'NR > 1 {print $1}'
-    executable: /bin/bash
-  changed_when: false
-  register: enabled_repos_result
+- name: Validate rhel setup
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Get enabled repos
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          dnf repolist --enabled | awk 'NR > 1 {print $1}'
+        executable: /bin/bash
+      changed_when: false
+      register: enabled_repos_result
 
-- name: Test enabled repos
-  loop: "{{ repo_list }}"
-  loop_control:
-    loop_var: repo
-    label: "{{ repo.name }}"
-  ansible.builtin.assert:
-    that:
-      - repo.name in enabled_repos_result.stdout_lines
-    fail_msg: "Failed to find {{ repo.name }}"
-    quiet: true
+    - name: Test enabled repos
+      loop: "{{ repo_list }}"
+      loop_control:
+        loop_var: repo
+        label: "{{ repo.name }}"
+      ansible.builtin.assert:
+        that:
+          - repo.name in enabled_repos_result.stdout_lines
+        fail_msg: "Failed to find {{ repo.name }}"
+        quiet: true
 
 ...

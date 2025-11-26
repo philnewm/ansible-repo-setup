@@ -19,22 +19,12 @@ repo_list:
     priority: 1
     timeout: 3
     skip_if_unavailable: true
-    # INFO https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo
-  - name: tuxedo
-    description: "Tuxedo drivers repository Fedora $releasever - $basearch"
-    baseurl: "https://rpm.tuxedocomputers.com/fedora/43/x86_64/base"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://rpm.tuxedocomputers.com/fedora/43/0x54840598.pub.asc"
-    priority: 50
-    timeout: 3
-    skip_if_unavailable: false
   - name: tuxedo-local
     description: "[Local] Tuxedo drivers repository Fedora $releasever - $basearch"
-    baseurl: "{{ local_registry }}/tuxedo-fedora-43/"
+    baseurl: "{{ local_registry }}/tuxedo-fedora-$releasever/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://rpm.tuxedocomputers.com/fedora/43/0x54840598.pub.asc"
+    gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
     priority: 1
     timeout: 3
     skip_if_unavailable: false
