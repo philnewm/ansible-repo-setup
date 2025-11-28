@@ -8,7 +8,7 @@ repo_list:
     gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "almalinux-baseos-local"
@@ -19,7 +19,7 @@ repo_list:
     gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "almalinux-crb-local"
@@ -29,7 +29,7 @@ repo_list:
     gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "almalinux-extras-local"
@@ -39,7 +39,7 @@ repo_list:
     gpgcheck: true
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
     metadata_expire: 86400
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: epel-9-local
@@ -48,7 +48,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "rocm-el9-local"
@@ -57,7 +57,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "vscode-local"
@@ -66,7 +66,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "rpmfusion-free-updates-local"
@@ -75,7 +75,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-9"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: rpmfusion-nonfree-updates-local
@@ -84,7 +84,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
 

@@ -7,7 +7,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: fedora-updates-local
@@ -16,7 +16,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: tuxedo-local
@@ -25,7 +25,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: false
   - name: fedora-updates-local
@@ -34,7 +34,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "rocm-el9-local"
@@ -43,7 +43,7 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
-    priority: 1
+    priority: 9
     timeout: 3
     skip_if_unavailable: true
   - name: "vscode-local"
@@ -52,25 +52,25 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    priority: 1
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: "rpmfusion-free-updates-local"
-    description: "[Local] RPM Fusion for EL 9 - Free - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-9-free/"
+    description: "[Local] RPM Fusion for Fedora 43 - Free - Updates"
+    baseurl: "{{ local_registry }}/rpm-fusion-43-free/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-9"
-    priority: 1
+    gpgkey: "https://download1.rpmfusion.org/free/fedora/RPM-GPG-KEY-rpmfusion-free-fedora-2020"
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
   - name: rpmfusion-nonfree-updates-local
-    description: "[Local] RPM Fusion for EL 9 - Nonfree - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-9-nonfree/"
+    description: "[Local] RPM Fusion for Fedora 43 - Nonfree - Updates"
+    baseurl: "{{ local_registry }}/rpm-fusion-43-nonfree/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
-    priority: 1
+    gpgkey: "https://download1.rpmfusion.org/nonfree/fedora/RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
+    priority: 10
     timeout: 3
     skip_if_unavailable: true
 
