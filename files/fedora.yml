@@ -37,9 +37,9 @@ repo_list:
     priority: 1
     timeout: 3
     skip_if_unavailable: true
-  - name: "rocm-el9-local"
+  - name: "rocm-el10-local"
     description: "[Local] ROCm repository"
-    baseurl: "{{ local_registry }}/rocm-el9/"
+    baseurl: "{{ local_registry }}/rocm-el10/"
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
