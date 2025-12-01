@@ -27,7 +27,7 @@ repo_list:
     gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
     priority: 10
     timeout: 3
-    skip_if_unavailable: false
+    skip_if_unavailable: true
   - name: fedora-updates-local
     description: "[Local] Fedora $releasever - $basearch - Updates"
     baseurl: "{{ local_registry }}/fedora43-updates/"
