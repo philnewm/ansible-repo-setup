@@ -57,7 +57,8 @@ repo_list:
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
-    priority: 10
+    # INFO epel also contains some rocm packages, setting higher prio to prevent ambiguity
+    priority: 9
     timeout: 3
     skip_if_unavailable: true
   - name: "vscode-local"
