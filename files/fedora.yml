@@ -37,39 +37,12 @@ repo_list:
     priority: 10
     timeout: 3
     skip_if_unavailable: true
-  - name: "rocm-el9-local"
-    description: "[Local] ROCm repository"
-    baseurl: "{{ local_registry }}/rocm-el9/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
-    priority: 9
-    timeout: 3
-    skip_if_unavailable: true
   - name: "vscode-local"
     description: "[Local] Visual Studio Code"
     baseurl: "{{ local_registry }}/vscode-yum/"
     enabled: true
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    priority: 10
-    timeout: 3
-    skip_if_unavailable: true
-  - name: "rpmfusion-free-updates-local"
-    description: "[Local] RPM Fusion for Fedora 43 - Free - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-43-free/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/free/fedora/RPM-GPG-KEY-rpmfusion-free-fedora-2020"
-    priority: 10
-    timeout: 3
-    skip_if_unavailable: true
-  - name: rpmfusion-nonfree-updates-local
-    description: "[Local] RPM Fusion for Fedora 43 - Nonfree - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-43-nonfree/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/nonfree/fedora/RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
     priority: 10
     timeout: 3
     skip_if_unavailable: true
