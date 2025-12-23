@@ -1,6 +1,6 @@
 ---
 
-repo_list:
+system_packages_repo_list:
   - name: fedora-local
     description: "[Local] Fedora $releasever - $basearch"
     baseurl: "{{ local_registry }}/fedora43-os/"

@@ -2,7 +2,7 @@
 
 - name: Check if repo file exists
   ansible.builtin.stat:
-    path: "{{ role_path }}/files/{{ ansible_distribution | lower }}.yml"
+    path: "{{ role_path }}/files/{{ ansible_facts.distribution | lower }}.yml"
   register: repo_file
   delegate_to: localhost
 
@@ -12,11 +12,11 @@
     file: "{{ repo_config }}"
 
 - name: Clean dnf changes
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts.os_family == "RedHat"
   block:
     - name: Remove repo files
       become: true
-      loop: "{{ repo_list }}"
+      loop: "{{ system_packages_repo_list }}"
       loop_control:
         loop_var: repo
         label: "{{ repo.name }}"

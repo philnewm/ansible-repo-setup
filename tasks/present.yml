@@ -2,11 +2,11 @@
 
 - name: Check if repo file exists
   ansible.builtin.stat:
-    path: "{{ role_path }}/files/{{ ansible_distribution | lower }}.yml"
+    path: "{{ role_path }}/files/{{ ansible_facts.distribution | lower }}.yml"
   register: repo_file
   delegate_to: localhost
 
-# TODO test loading vars as template to achieve variable substitution
+# INFO ensures variable substituation works
 - name: Load repository list from YAML file
   when: repo_file.stat.exists
   ansible.builtin.include_vars:
@@ -14,7 +14,7 @@
 
 - name: Include repo files logic
   ansible.builtin.include_tasks:
-    file: "{{ ansible_os_family | lower }}_repos.yml"
+    file: "{{ ansible_facts.os_family | lower }}_repos.yml"
 
 # - name: Insert local mirror
 #   become: true

@@ -6,7 +6,7 @@ repos_path_debian: "/etc/apt/sources.list"
 local_registry: "https://local_registry.com"
 gpg_key_base_path: "file:///etc"
 gpg_key_pki: "{{ gpg_key_base_path}}/pki/rpm-gpg"
-repo_config: "files/{{ ansible_distribution | lower }}.yml"
+repo_config: "files/{{ ansible_facts.distribution | lower }}.yml"
 
 pip_global_config_path: "/etc/pip.conf"
 pip_local_regsitry: false
