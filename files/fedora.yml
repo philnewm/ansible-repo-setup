@@ -19,15 +19,15 @@ system_packages_repo_list:
     priority: 10
     timeout: 3
     skip_if_unavailable: true
-  - name: tuxedo-local
-    description: "[Local] Tuxedo drivers repository Fedora $releasever - $basearch"
-    baseurl: "{{ local_registry }}/tuxedo-fedora-$releasever/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
-    priority: 10
-    timeout: 3
-    skip_if_unavailable: true
+  # - name: tuxedo-local
+  #   description: "[Local] Tuxedo drivers repository Fedora $releasever - $basearch"
+  #   baseurl: "{{ local_registry }}/tuxedo-fedora-$releasever/"
+  #   enabled: true
+  #   gpgcheck: true
+  #   gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
+  #   priority: 10
+  #   timeout: 3
+  #   skip_if_unavailable: true
   - name: fedora-updates-local
     description: "[Local] Fedora $releasever - $basearch - Updates"
     baseurl: "{{ local_registry }}/fedora43-updates/"
