@@ -9,7 +9,7 @@ gpg_key_pki: "{{ gpg_key_base_path}}/pki/rpm-gpg"
 repo_config: "files/{{ ansible_facts.distribution | lower }}.yml"
 
 pip_global_config_path: "/etc/pip.conf"
-pip_local_regsitry: false
+pip_local_registry: false
 pip_fallback_registry: "https://pypi.org/simple"
 pip_trusted_host: false
 

@@ -30,7 +30,7 @@
 
 - name: Configure pip registries
   become: true
-  when: pip_local_regsitry
+  when: pip_local_registry is ansible.builtin.string
   ansible.builtin.template:
     src: "pip.conf.j2"
     dest: "{{ pip_global_config_path }}"
