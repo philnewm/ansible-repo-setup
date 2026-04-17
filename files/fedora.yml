@@ -3,21 +3,21 @@
 system_packages_repo_list:
   - name: fedora-local
     description: "[Local] Fedora $releasever - $basearch"
-    baseurl: "{{ local_registry }}/fedora43-os/"
+    baseurl: "{{ local_registry }}/fedora/linux/releases/$major/Everything/$arch/os/"
     enabled: true
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: fedora-updates-local
     description: "[Local] Fedora $releasever - $basearch - Updates"
-    baseurl: "{{ local_registry }}/fedora43-updates/"
+    baseurl: "{{ local_registry }}/fedora/linux/updates/$major/Everything/$arch/"
     enabled: true
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   # - name: tuxedo-local
   #   description: "[Local] Tuxedo drivers repository Fedora $releasever - $basearch"
@@ -26,25 +26,16 @@ system_packages_repo_list:
   #   gpgcheck: true
   #   gpgkey: "https://rpm.tuxedocomputers.com/fedora/$releasever/0x54840598.pub.asc"
   #   priority: 10
-  #   timeout: 3
+  #   timeout: 1
   #   skip_if_unavailable: true
-  - name: fedora-updates-local
-    description: "[Local] Fedora $releasever - $basearch - Updates"
-    baseurl: "{{ local_registry }}/fedora43-updates/"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"
-    priority: 10
-    timeout: 3
-    skip_if_unavailable: true
   - name: "vscode-local"
     description: "[Local] Visual Studio Code"
-    baseurl: "{{ local_registry }}/vscode-yum/"
+    baseurl: "{{ local_registry }}/microsoft/yumrepos/vscode/"
     enabled: true
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
 
 ...

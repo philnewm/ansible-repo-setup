@@ -1,92 +1,94 @@
 ---
 
+system_packages_rocm_version: 7.1.1
+
 system_packages_repo_list:
   - name: "almalinux-appstream-local"
     description: "[Local] AlmaLinux $releasever - AppStream"
-    baseurl: "{{ local_registry }}/almalinux-$releasever-appstream/"
+    baseurl: "{{ local_registry }}/almalinux/$releasever/AppStream/$basearch/os/"
     enabled: true
     gpgcheck: true
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-{{ ansible_facts.distribution_major_version }}"
     metadata_expire: 86400
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: "almalinux-baseos-local"
     description: "[Local] AlmaLinux $releasever - BaseOS"
     file_name: almalinux-baseos-local
-    baseurl: "{{ local_registry }}/almalinux-$releasever-baseos/"
+    baseurl: "{{ local_registry }}/almalinux/$releasever/BaseOS/$basearch/os/"
     enabled: true
     gpgcheck: true
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-{{ ansible_facts.distribution_major_version }}"
     metadata_expire: 86400
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: "almalinux-crb-local"
     description: "[Local] AlmaLinux $releasever - CRB"
-    baseurl: "{{ local_registry}}/almalinux-$releasever-crb/"
+    baseurl: "{{ local_registry}}/almalinux/$releasever/CRB/$basearch/os/"
     enabled: true
     gpgcheck: true
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-{{ ansible_facts.distribution_major_version }}"
     metadata_expire: 86400
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: "almalinux-extras-local"
     description: "[Local] AlmaLinux $releasever - Extras"
-    baseurl: "{{ local_registry }}/almalinux-$releasever-extras/"
+    baseurl: "{{ local_registry }}/almalinux/$releasever/extras/$basearch/os/"
     enabled: true
     gpgcheck: true
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-9"
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-AlmaLinux-{{ ansible_facts.distribution_major_version }}"
     metadata_expire: 86400
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
-  - name: epel-9-local
-    description: "[Local] Extra Packages for Enterprise Linux 9 - $basearch"
-    baseurl: "{{ local_registry }}/epel-9/"
+  - name: epel-local
+    description: "[Local] Extra Packages for Enterprise Linux $releasever - $basearch"
+    baseurl: "{{ local_registry }}/epel/$releasever/Everything/$basearch/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9"
+    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_facts.distribution_major_version }}"
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
-  - name: "rocm-el9-local"
-    description: "[Local] ROCm repository"
-    baseurl: "{{ local_registry }}/rocm-el9/"
+  - name: "rocm-{{ system_packages_rocm_version }}-local"
+    description: "[Local] ROCm {{ system_packages_rocm_version }} repository"
+    baseurl: "{{ local_registry }}/rocm/el$releasever/{{ system_packages_rocm_version }}/main/"
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
-    # INFO epel also contains some rocm packages, setting higher prio to prevent ambiguity
+    # Note epel also contains some rocm packages, setting higher prio to prevent ambiguity
     priority: 9
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: "vscode-local"
     description: "[Local] Visual Studio Code"
-    baseurl: "{{ local_registry }}/vscode-yum/"
+    baseurl: "{{ local_registry }}/microsoft/yumrepos/vscode/"
     enabled: true
     gpgcheck: true
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: "rpmfusion-free-updates-local"
-    description: "[Local] RPM Fusion for EL 9 - Free - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-9-free/"
+    description: "[Local] RPM Fusion for EL {{ ansible_facts.distribution_major_version }} - Free - Updates"
+    baseurl: "{{ local_registry }}/rpmfusion-el/free/el/updates/$releasever/$basearch/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-9"
+    gpgkey: "https://download1.rpmfusion.org/free/el/RPM-GPG-KEY-rpmfusion-free-el-{{ ansible_facts.distribution_major_version }}"
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
   - name: rpmfusion-nonfree-updates-local
-    description: "[Local] RPM Fusion for EL 9 - Nonfree - Updates"
-    baseurl: "{{ local_registry }}/rpm-fusion-9-nonfree/"
+    description: "[Local] RPM Fusion for EL {{ ansible_facts.distribution_major_version }} - Nonfree - Updates"
+    baseurl: "{{ local_registry }}/rpmfusion-el/nonfree/el/updates/$releasever/$basearch/"
     enabled: true
     gpgcheck: true
-    gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-9"
+    gpgkey: "https://download1.rpmfusion.org/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-{{ ansible_facts.distribution_major_version }}"
     priority: 10
-    timeout: 3
+    timeout: 1
     skip_if_unavailable: true
 
 ...
