@@ -6,7 +6,7 @@
   register: repo_file
   delegate_to: localhost
 
-# INFO ensures variable substituation works
+# Note ensures variable substituation works
 - name: Load repository list from YAML file
   when: repo_file.stat.exists
   ansible.builtin.include_vars:

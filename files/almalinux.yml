@@ -1,7 +1,5 @@
 ---
 
-system_packages_rocm_version: 7.1.1
-
 system_packages_repo_list:
   - name: "almalinux-appstream-local"
     description: "[Local] AlmaLinux $releasever - AppStream"
@@ -53,9 +51,9 @@ system_packages_repo_list:
     priority: 10
     timeout: 1
     skip_if_unavailable: true
-  - name: "rocm-{{ system_packages_rocm_version }}-local"
-    description: "[Local] ROCm {{ system_packages_rocm_version }} repository"
-    baseurl: "{{ local_registry }}/rocm/el$releasever/{{ system_packages_rocm_version }}/main/"
+  - name: "rocm-{{ repo_setup_rocm_version }}-local"
+    description: "[Local] ROCm {{ repo_setup_rocm_version }} repository"
+    baseurl: "{{ local_registry }}/rocm/el$releasever/{{ repo_setup_rocm_version }}/main/"
     enabled: true
     gpgcheck: true
     gpgkey: "https://repo.radeon.com/rocm/rocm.gpg.key"
