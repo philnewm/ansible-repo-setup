@@ -5,8 +5,9 @@ repos_path_rhel: "/etc/yum.repos.d"
 repos_path_debian: "/etc/apt/sources.list"
 local_registry: "https://local_registry.com"
 gpg_key_base_path: "file:///etc"
-gpg_key_pki: "{{ gpg_key_base_path}}/pki/rpm-gpg"
+gpg_key_pki: "{{ gpg_key_base_path }}/pki/rpm-gpg"
 repo_config: "files/{{ ansible_facts.distribution | lower }}.yml"
+repo_setup_rocm_version: "7.2.4"
 
 pip_global_config_path: "/etc/pip.conf"
 pip_local_registry: false
