@@ -24,13 +24,13 @@
 #     label: "{{ item.0.suite }}"
 #   ansible.builtin.lineinfile:
 #     path: "{{ repos_path_debian }}"
-#     line: "deb {{ local_registry }} {{ item.0.suite }} {{ item.1 }}"
+#     line: "deb {{ repo_setup_online_mirror }} {{ item.0.suite }} {{ item.1 }}"
 #     insertbefore: "deb .*{{ item.0.suite }} {{ item.1 }}"
 #   register: apt_repo_setup
 
 - name: Configure pip registries
   become: true
-  when: pip_local_registry is ansible.builtin.string
+  when: pip_repo_setup_online_mirror is ansible.builtin.string
   ansible.builtin.template:
     src: "pip.conf.j2"
     dest: "{{ pip_global_config_path }}"

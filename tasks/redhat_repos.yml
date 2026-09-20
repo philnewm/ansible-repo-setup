@@ -1,30 +1,44 @@
 ---
 
-- name: Set up repos
+- name: Configure yum repositories
   become: true
-  loop: "{{ system_packages_repo_list }}"
+  vars:
+    distro: "{{ ansible_facts.distribution }}"
+    repo_path: "{{ repo }}/$releasever/{{ param.nice_name }}/$basearch/os/"
+    public_mirror: "{{ repo_setup_yum[distro | lower]['public_mirror'] }}"
+    local_mirror: "{{ repo_setup_yum[distro | lower]['local_mirror'] }}"
+  loop: "{{ repo_setup_yum[distro | lower][ansible_facts.distribution_major_version] | dict2items(key_name='id', value_name='param') }}"
   loop_control:
     loop_var: repo
-    label: "{{ repo.name }}"
+    label: "{{ repo.id }}"
   ansible.builtin.yum_repository:
-    name: "{{ repo.name }}"
-    description: "{{ repo.description }}"
-    baseurl: "{{ repo.baseurl }}"
-    priority: "{{ repo.priority }}"
-    timeout: "{{ repo.timeout }}"
-    enabled: "{{ repo.enabled | default(true) }}"
-    gpgcheck: "{{ repo.enabled }}"
-    gpgkey: "{{ repo.gpgkey }}"
-    metadata_expire: "{{ repo.metadata_expire | default(21600) }}"
-    skip_if_unavailable: "{{ repo.skip_if_unavailable | default(false) }}"
+    name: "{{ repo.id }}"
+    description: "{{ distro }} $releasever - {{ repo.param.nice_name }}"
+    file: "{{ distro | lower }}-{{ repo.id }}"
+    baseurl: >-
+      {{
+        (
+          [local_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.nice_name ~ "/$basearch/os/"]
+          if local_mirror | length > 0 else []
+        )
+        +
+        [public_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.nice_name ~ "/$basearch/os/"]
+      }}
+    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-{{ distro }}-{{ ansible_facts.distribution_major_version }}"
+    gpgcheck: "{{ param.gpgcheck | default(true) }}"
+    enabled: "{{ param.enabled | default(true) }}"
+    countme: "{{ param.countme | default(true) }}"
+    metadata_expire: "{{ param.metadata_expire | default(86400) }}"
+    skip_if_unavailable: "{{ param.skip_if_unavailable | default(false) }}"
     mode: "0644"
     owner: "root"
+    group: "root"
     state: present
-  register: dnf_repo_setup
+  register: yum_repo_setup
 
 - name: Clean dnf cache
   become: true
-  when: dnf_repo_setup.changed  # noqa: no-handler
+  when: yum_repo_setup.changed  # noqa: no-handler
   ansible.builtin.command:
     cmd: dnf clean all
   register: dnf_clean_result

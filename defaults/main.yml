@@ -3,16 +3,35 @@
 state: present
 repos_path_rhel: "/etc/yum.repos.d"
 repos_path_debian: "/etc/apt/sources.list"
-local_registry: "https://local_registry.com"
+repo_setup_online_mirror: "https://repo_setup_online_mirror.com"
 gpg_key_base_path: "file:///etc"
 gpg_key_pki: "{{ gpg_key_base_path }}/pki/rpm-gpg"
 repo_config: "files/{{ ansible_facts.distribution | lower }}.yml"
 repo_setup_rocm_version: "7.2.4"
 
 pip_global_config_path: "/etc/pip.conf"
-pip_local_registry: false
+pip_repo_setup_online_mirror: false
 pip_fallback_registry: "https://pypi.org/simple"
 pip_trusted_host: false
+
+# TODO verify if using `mirrorlist` makes sense
+repo_setup_yum:
+  almalinux:
+    public_mirror: "https://repo.almalinux.org"
+    local_mirror: ""
+    "9":
+      "appstream":
+        nice_name: AppStream
+        enable: true
+      "baseos":
+        nice_name: BaseOS
+        enable: true
+      "crb":
+        nice_name: CRB
+        enable: true
+      "extras":
+        nice_name: extras  # uppercase E would not work for mirror url
+        enable: true
 
 apt_repo_entries:
   - suite: "jammy"
