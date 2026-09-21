@@ -1,0 +1,118 @@
+---
+
+# TODO setting up local proxy detection via apt might be the smarter way here
+# Might also not work at all with pulp
+# /etc/apt/apt.conf.d/99local-proxy
+# Acquire::http::Proxy-Auto-Detect "/usr/local/bin/apt-proxy-detect";
+# then have /usr/local/bin/apt-proxy-detect return either http://apt-cache.internal:3142/ or DIRECT
+
+# - name: Ensure python debian
+#   become: true
+#   ansible.builtin.apt:
+#     name: python3-debian
+
+# - name: Read sources files
+#   ansible.builtin.command:
+#     argv:
+#       - python3
+#       - -c
+#       - |
+#         import json
+#         from debian.deb822 import Deb822
+
+#         with open("{{ repos_path_debian }}/{{ ansible_facts.distribution | lower }}.sources") as apt_file:
+#             print(json.dumps([
+#                 dict(paragraph)
+#                 for paragraph in Deb822.iter_paragraphs(apt_file)
+#             ]))
+#   register: apt_sources
+#   changed_when: false
+
+# - name: Parse repository configuration
+#   ansible.builtin.set_fact:
+#     apt_repositories: "{{ apt_sources.stdout | from_json }}"
+
+# - name: Ensure mirrors directory exists
+#   become: true
+#   ansible.builtin.file:
+#     path: "{{ repos_setup_deb_mirror_dir }}"
+#     state: directory
+#     owner: root
+#     group: root
+#     mode: "0775"
+
+# - name: Create apt mirror lists
+#   become: true
+#   vars:
+#     distro: "{{ ansible_facts.distribution | lower }}"
+#     repo_uris: "{{ repo.URIs | split() }}"
+#     upstream_uri: "{{ repo_uris | last }}"
+#     upstream_path: "{{ upstream_uri | urlsplit('path') }}"
+#     mirror_file: >-
+#       {{ repos_setup_deb_mirror_dir }}/{{ distro }}-{{ repo.Suites.split() | first }}.list
+#     local_uri: "{{ repo_setup_local_mirror }}{{ upstream_path }}"
+#   loop: "{{ apt_repositories }}"
+#   loop_control:
+#     loop_var: repo
+#     label: "{{ repo.Suites }}"
+#   when: not repo.URIs.startswith('mirror+file:')
+#   ansible.builtin.copy:
+#     dest: "{{ mirror_file }}"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#     content: |
+#       {{ local_uri }}	 priority:1
+#       {{ upstream_uri }}	priority:2
+#   register: apt_mirror_lists
+
+# - name: Configure sources to use mirror lists
+#   become: true
+#   vars:
+#     distro: "{{ ansible_facts.distribution | lower }}"
+#     mirror_file: >-
+#       /etc/apt/mirrors/{{ distro }}-{{ repo.Suites.split() | first }}.list
+#   loop: "{{ apt_repositories }}"
+#   loop_control:
+#     loop_var: repo
+#     label: "{{ repo.Suites }}"
+#   when: not repo.URIs.startswith('mirror+file:')
+#   ansible.builtin.replace:
+#     path: "{{ repos_path_debian }}/{{ distro }}.sources"
+#     regexp: "^URIs:\\s+{{ repo.URIs | regex_escape }}$"
+#     replace: "URIs: mirror+file:{{ mirror_file }}"
+#   register: apt_sources_updated
+
+# - name: Add local mirror before upstream URI
+#   become: true
+#   vars:
+#     distro: "{{ ansible_facts.distribution | lower }}"
+#     repo_file: "{{ repos_path_debian }}/{{ distro }}.sources"
+#     repo_uris: "{{ repo.URIs | split() }}"
+#     upstream_uri: "{{ repo_uris | last }}"
+#     upstream_path: "{{ upstream_uri | urlsplit('path') }}"
+#     local_uri: "{{ repo_setup_local_mirror }}{{ upstream_path }}"
+#   loop: "{{ apt_repositories }}"
+#   loop_control:
+#     loop_var: repo
+#     label: "{{ repo.URIs }}"
+#   when: local_uri not in repo_uris
+#   ansible.builtin.replace:
+#     path: "{{ repo_file }}"
+#     regexp: >-
+#       ^URIs:\s+{{ repo.URIs | regex_escape }}$
+#     replace: >-
+#       URIs: {{ local_uri }} {{ repo.URIs }}
+#   register: apt_repo_setup
+
+# - name: Update apt metadata cache
+#   become: true
+#   when: apt_sources_updated.changed  # noqa: no-handler
+#   ansible.builtin.apt:
+#     update_cache: true
+
+- name: No-op
+  ansible.builtin.debug:
+    msg: Not implemented
+
+...

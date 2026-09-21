@@ -5,17 +5,21 @@
   block:
     - name: Remove repo files
       become: true
+      vars:
+        distro: "{{ ansible_facts.distribution | lower }}"
       loop: "{{ repo_setup_yum[ansible_facts.distribution | lower][ansible_facts.distribution_major_version] | dict2items(key_name='id', value_name='param') }}"
       loop_control:
         loop_var: repo
-        label: "{{ repo.id }}"
+        label: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
       ansible.builtin.yum_repository:
-        name: "{{ repo.id }}"
+        name: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
+        file: "{{ repo.param.file | default(repo_setup_prefix | lower ~ '-' ~ distro | lower ~ '-' ~ repo.id) }}"
         state: absent
       register: repo_removal
 
     - name: Clean dnf cache
       become: true
+      when: repo_removal.changed  # noqa: no-handler
       ansible.builtin.command:
         cmd: dnf clean all
       register: dnf_clean_result

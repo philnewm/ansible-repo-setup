@@ -19,8 +19,8 @@
         label: "{{ repo.id }}"
       ansible.builtin.assert:
         that:
-          - repo.id in enabled_repos_result.stdout_lines
-        fail_msg: "Failed to find {{ repo.id }}"
+          - repo_setup_prefix | lower ~ '-' ~ repo.id in enabled_repos_result.stdout_lines
+        fail_msg: "Failed to find {{ repo_setup_prefix | lower ~ '-' ~ repo.id }}"
         quiet: true
 
     - name: Test package install

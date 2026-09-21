@@ -2,10 +2,10 @@
 
 state: present
 repos_path_rhel: "/etc/yum.repos.d"
-repos_path_debian: "/etc/apt/sources.list"
+repos_path_debian: "/etc/apt/sources.list.d"
+repos_setup_deb_mirror_dir: "/etc/apt/mirrors"
 repo_setup_online_mirror: "https://repo_setup_online_mirror.com"
-gpg_key_base_path: "file:///etc"
-repo_setup_gpg_key_pki: "{{ gpg_key_base_path }}/pki/rpm-gpg"
+repo_setup_gpg_key_pki: "file:///etc/pki/rpm-gpg"
 pip_global_config_path: "/etc/pip.conf"
 pip_repo_setup_online_mirror: false
 pip_fallback_registry: "https://pypi.org/simple"
@@ -139,23 +139,50 @@ repo_setup_yum:
         repo_gpgcheck: false
         path: "fedora/openh264/$releasever/$basearch/os/"
 
-apt_repo_entries:
-  - suite: "jammy"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
-  - suite: "jammy-updates"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
-  - suite: "jammy-security"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
+# repo_setup_apt:
+#   ubuntu:
+#     components:
+#       - main
+#       - restricted
+#       - universe
+#       - multiverse
+#     noble:
+#       archive:
+#         path: ubuntu/
+#         suites:
+#           - ""
+#           - "-updates"
+#           - "-backports"
+#       security:
+#         path: ubuntu-security/
+#         suites:
+#           - "-security"
+#     resolute:
+#       archive:
+#         path: ubuntu/
+#         suites:
+#           - ""
+#           - "-updates"
+#           - "-backports"
+#       security:
+#         path: ubuntu-security/
+#         suites:
+#           - "-security"
+#   debian:
+#     components:
+#       - main
+#       - contrib
+#       - non-free
+#       - non-free-firmware
+#     trixie:
+#       archive:
+#         path: debian/
+#         suites:
+#           - ""
+#           - "-updates"
+#       security:
+#         path: debian-security/
+#         suites:
+#           - "-security"
+
 ...

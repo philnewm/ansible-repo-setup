@@ -3,33 +3,35 @@
 - name: Configure yum repositories
   become: true
   vars:
-    distro: "{{ ansible_facts.distribution }}"
-    repo_path: "{{ repo }}/$releasever/{{ param.nice_name }}/$basearch/os/"
-    public_mirror: "{{ repo_setup_yum[distro | lower]['public_mirror'] }}"
-    local_mirror: "{{ repo_setup_yum[distro | lower]['local_mirror'] }}"
-  loop: "{{ repo_setup_yum[distro | lower][ansible_facts.distribution_major_version] | dict2items(key_name='id', value_name='param') }}"
+    distro: "{{ ansible_facts.distribution | lower }}"
+    distro_name: "{{ ansible_facts.distribution }}"
+    major: "{{ ansible_facts.distribution_major_version }}"
+    distro_config: "{{ repo_setup_yum[distro] }}"
+    local_mirror: "{{ repo_setup_local_mirror }}"
+  loop: "{{ distro_config[major] | dict2items(key_name='id', value_name='param') }}"
   loop_control:
     loop_var: repo
-    label: "{{ repo.id }}"
+    label: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
   ansible.builtin.yum_repository:
-    name: "{{ repo.id }}"
-    description: "{{ distro }} $releasever - {{ repo.param.nice_name }}"
-    file: "{{ repo.param.file | default(distro | lower ~ '-' ~ repo.id) }}"
+    name: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
+    description: "{{ repo_setup_prefix }} {{ distro_name }} $releasever - {{ repo.param.nice_name }}"
+    file: "{{ repo.param.file | default(repo_setup_prefix | lower ~ '-' ~ distro | lower ~ '-' ~ repo.id) }}"
     baseurl: >-
-      {{
-        (
-          [local_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.suite_name ~ "/$basearch/os/"]
-          if local_mirror | length > 0 else []
-        )
-        +
-        [public_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.suite_name ~ "/$basearch/os/"]
-      }}
-    gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-{{ distro }}-{{ ansible_facts.distribution_major_version }}"
-    gpgcheck: "{{ param.gpgcheck | default(true) }}"
-    enabled: "{{ param.enabled | default(true) }}"
-    countme: "{{ param.countme | default(true) }}"
-    metadata_expire: "{{ param.metadata_expire | default(86400) }}"
-    skip_if_unavailable: "{{ param.skip_if_unavailable | default(false) }}"
+      {{ local_mirror }}/{{ (
+        repo.param.path
+        | default(distro_config.path)
+      ).format(suite=repo.param.suite | default(''), major=major | default('')) }}
+    gpgkey: "{{ repo.param.gpgkey | default(repo_setup_gpg_key_pki ~ '/RPM-GPG-KEY-' ~ distro_name ~ '-' ~ major) }}"
+    gpgcheck: "{{ repo.param.gpgcheck | default(true) }}"
+    repo_gpgcheck: "{{ repo.param.repo_gpgcheck | default(true) }}"
+    enabled: "{{ repo.param.enabled | default(true) }}"
+    countme: "{{ repo.param.countme | default(true) }}"
+    retries: "{{ repo.param.retries | default(1) }}"
+    timeout: "{{ repo.param.timeout | default(1) }}"
+    cost: "{{ repo.param.cost | default(100) }}"
+    priority: "{{ repo.param.priority | default(omit) }}"
+    metadata_expire: "{{ repo.param.metadata_expire | default('6h') }}"
+    skip_if_unavailable: "{{ repo.param.skip_if_unavailable | default(true) }}"
     mode: "0644"
     owner: "root"
     group: "root"
