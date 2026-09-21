@@ -18,11 +18,11 @@
     baseurl: >-
       {{
         (
-          [local_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.nice_name ~ "/$basearch/os/"]
+          [local_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.suite ~ "/$basearch/os/"]
           if local_mirror | length > 0 else []
         )
         +
-        [public_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.nice_name ~ "/$basearch/os/"]
+        [public_mirror ~ "/" ~ distro | lower ~ "/$releasever/" ~ repo.param.suite ~ "/$basearch/os/"]
       }}
     gpgkey: "{{ gpg_key_pki }}/RPM-GPG-KEY-{{ distro }}-{{ ansible_facts.distribution_major_version }}"
     gpgcheck: "{{ param.gpgcheck | default(true) }}"
