@@ -2,35 +2,187 @@
 
 state: present
 repos_path_rhel: "/etc/yum.repos.d"
-repos_path_debian: "/etc/apt/sources.list"
-local_registry: "https://local_registry.com"
-gpg_key_base_path: "file:///etc"
-gpg_key_pki: "{{ gpg_key_base_path }}/pki/rpm-gpg"
-repo_config: "files/{{ ansible_facts.distribution | lower }}.yml"
-repo_setup_rocm_version: "7.2.4"
-
+repos_path_debian: "/etc/apt/sources.list.d"
+repos_setup_deb_mirror_dir: "/etc/apt/mirrors"
+repo_setup_online_mirror: "https://repo_setup_online_mirror.com"
+repo_setup_gpg_key_pki: "file:///etc/pki/rpm-gpg"
 pip_global_config_path: "/etc/pip.conf"
-pip_local_registry: false
+pip_repo_setup_online_mirror: false
 pip_fallback_registry: "https://pypi.org/simple"
 pip_trusted_host: false
 
-apt_repo_entries:
-  - suite: "jammy"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
-  - suite: "jammy-updates"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
-  - suite: "jammy-security"
-    components:
-      - "main"
-      - "restricted"
-      - "universe"
-      - "multiverse"
+repo_setup_local_mirror: "https://local.mirror.com"
+repo_setup_prefix: "Local"
+repo_setup_gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-"
+
+repo_setup_yum:
+  almalinux:
+    # based on https://repo.almalinux.org/
+    path: "almalinux/$releasever/{suite}/$basearch/os/"
+    "9":
+      appstream:
+        nice_name: AppStream
+        suite: AppStream
+        repo_gpgcheck: false
+      baseos:
+        nice_name: BaseOS
+        suite: BaseOS
+        repo_gpgcheck: false
+      crb:
+        nice_name: CRB
+        suite: CRB
+        repo_gpgcheck: false
+      extras:
+        nice_name: Extras
+        suite: extras
+        repo_gpgcheck: false
+      highavailability:
+        nice_name: HighAvailability
+        suite: HighAvailability
+        repo_gpgcheck: false
+      nfv:
+        nice_name: NFV
+        suite: NFV
+        repo_gpgcheck: false
+      plus:
+        nice_name: Plus
+        suite: plus
+        repo_gpgcheck: false
+      resilientstorage:
+        nice_name: ResilientStorage
+        suite: ResilientStorage
+        repo_gpgcheck: false
+      rt:
+        nice_name: RT
+        suite: RT
+        repo_gpgcheck: false
+      saphana:
+        nice_name: SAPHANA
+        suite: SAPHANA
+        repo_gpgcheck: false
+      sap:
+        nice_name: SAP
+        suite: SAP
+        repo_gpgcheck: false
+      nvidia:
+        nice_name: NVIDIA
+        repo_gpgcheck: false
+        path: "almalinux-nvidia/$releasever/$basearch/"
+  rocky:
+    # based on https://dl.rockylinux.org/pub/rocky/
+    path: "rocky/$releasever/{suite}/$basearch/os/"
+    "9":
+      "appstream":
+        nice_name: AppStream
+        suite: AppStream
+        file: "rocky"
+        repo_gpgcheck: false
+      "baseos":
+        nice_name: BaseOS
+        suite: BaseOS
+        file: "rocky"
+        repo_gpgcheck: false
+      "crb":
+        nice_name: CRB
+        suite: CRB
+        file: "rocky"
+        repo_gpgcheck: false
+      "extras":
+        nice_name: Extras
+        suite: extras
+        file: "rocky-extras"
+        repo_gpgcheck: false
+      "plus":
+        nice_name: Plus
+        suite: plus
+        file: "rocky-extras"
+        repo_gpgcheck: false
+  centos:
+    # based on https://https://mirror.stream.centos.org/
+    path: "centos-stream/{major}-stream/{suite}/$basearch/os/"
+    "9":
+      "appstream":
+        nice_name: AppStream
+        suite: AppStream
+        file: "centos"
+        repo_gpgcheck: false
+      "baseos":
+        nice_name: BaseOS
+        suite: BaseOS
+        file: "centos"
+        repo_gpgcheck: false
+      "crb":
+        nice_name: CRB
+        suite: CRB
+        file: "centos"
+        repo_gpgcheck: false
+      "extras-common":
+        nice_name: Extras packages
+        path: "centos-stream/SIGs/{major}-stream/extras/$basearch/extras-common/"
+  fedora:
+    # based on # https://dl.fedoraproject.org/pub/fedora/linux/releases/43/Everything/x86_64/os/
+    path: "fedora/linux/{suite}/$releasever/Everything/$basearch/os/"
+    "43":
+      "fedora":
+        nice_name: Fedora
+        suite: releases
+        metadata_expire: "7d"
+        repo_gpgcheck: false
+      "updates":
+        suite: updates
+        nice_name: Updates
+        repo_gpgcheck: false
+        path: "fedora/linux/{suite}/$releasever/Everything/$basearch/"
+      "fedora-cisco-openh264":
+        nice_name: openh264 (From Cisco)
+        metadata_expire: "14d"
+        repo_gpgcheck: false
+        path: "fedora/openh264/$releasever/$basearch/os/"
+
+# repo_setup_apt:
+#   ubuntu:
+#     components:
+#       - main
+#       - restricted
+#       - universe
+#       - multiverse
+#     noble:
+#       archive:
+#         path: ubuntu/
+#         suites:
+#           - ""
+#           - "-updates"
+#           - "-backports"
+#       security:
+#         path: ubuntu-security/
+#         suites:
+#           - "-security"
+#     resolute:
+#       archive:
+#         path: ubuntu/
+#         suites:
+#           - ""
+#           - "-updates"
+#           - "-backports"
+#       security:
+#         path: ubuntu-security/
+#         suites:
+#           - "-security"
+#   debian:
+#     components:
+#       - main
+#       - contrib
+#       - non-free
+#       - non-free-firmware
+#     trixie:
+#       archive:
+#         path: debian/
+#         suites:
+#           - ""
+#           - "-updates"
+#       security:
+#         path: debian-security/
+#         suites:
+#           - "-security"
+
 ...

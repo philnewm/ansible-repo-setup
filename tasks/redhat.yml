@@ -1,0 +1,54 @@
+---
+
+- name: Configure yum repositories
+  become: true
+  vars:
+    distro: "{{ ansible_facts.distribution | lower }}"
+    distro_name: "{{ ansible_facts.distribution }}"
+    major: "{{ ansible_facts.distribution_major_version }}"
+    distro_config: "{{ repo_setup_yum[distro] }}"
+    local_mirror: "{{ repo_setup_local_mirror }}"
+  loop: "{{ distro_config[major] | dict2items(key_name='id', value_name='param') }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
+  ansible.builtin.yum_repository:
+    name: "{{ repo_setup_prefix | lower }}-{{ repo.id }}"
+    description: "{{ repo_setup_prefix }} {{ distro_name }} $releasever - {{ repo.param.nice_name }}"
+    file: "{{ repo.param.file | default(repo_setup_prefix | lower ~ '-' ~ distro | lower ~ '-' ~ repo.id) }}"
+    baseurl: >-
+      {{ local_mirror }}/{{ (
+        repo.param.path
+        | default(distro_config.path)
+      ).format(suite=repo.param.suite | default(''), major=major | default('')) }}
+    gpgkey: "{{ repo.param.gpgkey | default(repo_setup_gpg_key_pki ~ '/RPM-GPG-KEY-' ~ distro_name ~ '-' ~ major) }}"
+    gpgcheck: "{{ repo.param.gpgcheck | default(true) }}"
+    repo_gpgcheck: "{{ repo.param.repo_gpgcheck | default(true) }}"
+    enabled: "{{ repo.param.enabled | default(true) }}"
+    countme: "{{ repo.param.countme | default(true) }}"
+    retries: "{{ repo.param.retries | default(1) }}"
+    timeout: "{{ repo.param.timeout | default(1) }}"
+    cost: "{{ repo.param.cost | default(100) }}"
+    priority: "{{ repo.param.priority | default(omit) }}"
+    metadata_expire: "{{ repo.param.metadata_expire | default('6h') }}"
+    skip_if_unavailable: "{{ repo.param.skip_if_unavailable | default(true) }}"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+    state: present
+  register: yum_repo_setup
+
+- name: Clean dnf cache
+  become: true
+  when: yum_repo_setup.changed  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: dnf clean all
+  register: dnf_clean_result
+  changed_when: dnf_clean_result.rc == 0
+
+- name: Update dnf metadata cache
+  become: true
+  ansible.builtin.dnf:
+    update_cache: true
+
+...
